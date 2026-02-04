@@ -1,0 +1,236 @@
+.reviews {
+  background: var(--white);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.review-card {
+  background: var(--bg-light);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.review-card:nth-child(1) { animation-delay: 0.1s; }
+.review-card:nth-child(2) { animation-delay: 0.2s; }
+.review-card:nth-child(3) { animation-delay: 0.3s; }
+
+.review-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, var(--primary-blue), var(--accent-orange), var(--accent-red));
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.review-card:hover::before {
+  opacity: 1;
+}
+
+.review-card:hover {
+  border-color: transparent;
+  box-shadow: 0 15px 50px rgba(0, 102, 204, 0.2);
+  transform: translateY(-8px) scale(1.02);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.review-author h4 {
+  color: var(--text-dark);
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+.review-vehicle {
+  color: var(--text-gray);
+  font-size: 0.875rem;
+}
+
+.review-rating {
+  display: flex;
+  gap: 0.25rem;
+  color: #FFC107;
+}
+
+.review-rating svg {
+  filter: drop-shadow(0 2px 4px rgba(255, 193, 7, 0.3));
+  animation: starPulse 2s ease-in-out infinite;
+}
+
+.review-rating svg:nth-child(1) { animation-delay: 0s; }
+.review-rating svg:nth-child(2) { animation-delay: 0.1s; }
+.review-rating svg:nth-child(3) { animation-delay: 0.2s; }
+.review-rating svg:nth-child(4) { animation-delay: 0.3s; }
+.review-rating svg:nth-child(5) { animation-delay: 0.4s; }
+
+.review-card:hover .review-rating svg {
+  animation: starBounce 0.6s ease-out;
+}
+
+.review-card:hover .review-rating svg:nth-child(1) { animation-delay: 0s; }
+.review-card:hover .review-rating svg:nth-child(2) { animation-delay: 0.1s; }
+.review-card:hover .review-rating svg:nth-child(3) { animation-delay: 0.2s; }
+.review-card:hover .review-rating svg:nth-child(4) { animation-delay: 0.3s; }
+.review-card:hover .review-rating svg:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes starPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes starBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0);
+  }
+  25% {
+    transform: translateY(-8px) rotate(-10deg);
+  }
+  75% {
+    transform: translateY(-4px) rotate(10deg);
+  }
+}
+
+.review-text {
+  color: var(--text-gray);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.google-reviews {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.google-badge {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--white);
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.google-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4285F4, #34A853);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.google-info {
+  text-align: left;
+}
+
+.google-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.google-rating strong {
+  font-size: 2rem;
+  color: var(--text-dark);
+}
+
+.google-rating .stars {
+  display: flex;
+  gap: 0.25rem;
+  color: #FFC107;
+}
+
+.google-info p {
+  color: var(--text-gray);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .review-card {
+    padding: 1.5rem;
+  }
+
+  .google-badge {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .google-info {
+    text-align: center;
+  }
+
+  .google-rating {
+    justify-content: center;
+  }
+}

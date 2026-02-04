@@ -1,0 +1,133 @@
+.contact {
+  background: var(--bg-light);
+}
+
+.contact-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.contact-card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(253, 185, 19, 0.15);
+}
+
+.contact-icon {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--primary-yellow), var(--accent-yellow-dark));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-dark);
+  margin: 0 auto 1.25rem;
+}
+
+.contact-card h3 {
+  color: var(--text-dark);
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.contact-link {
+  display: block;
+  color: var(--primary-dark);
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.contact-link:hover {
+  color: var(--primary-yellow);
+}
+
+.contact-address,
+.contact-hours {
+  color: var(--text-dark);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.contact-card p {
+  color: var(--text-gray);
+  font-size: 0.875rem;
+}
+
+.map-container {
+  background: var(--white);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  height: 450px;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.company-info {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.company-info h3 {
+  color: var(--text-dark);
+  margin-bottom: 1.5rem;
+}
+
+.company-details {
+  color: var(--text-gray);
+}
+
+.company-details p {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-info {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .contact-card {
+    padding: 1.5rem;
+  }
+
+  .map-container {
+    height: 350px;
+  }
+}
