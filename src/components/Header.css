@@ -1,0 +1,157 @@
+.top-bar {
+  background: var(--text-dark);
+  color: var(--white);
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+}
+
+.top-bar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar-info {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.top-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--white);
+}
+
+.top-bar-item:hover {
+  color: var(--primary-yellow);
+}
+
+.header {
+  background: var(--white);
+  box-shadow: 0 2px 10px var(--shadow);
+  position: relative;
+  z-index: 1000;
+}
+
+.header.sticky {
+  position: sticky;
+  top: 0;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+}
+
+.logo {
+  display: block;
+  line-height: 0;
+}
+
+.logo img {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  padding: 0.5rem;
+  color: var(--text-dark);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav a {
+  font-weight: 500;
+  color: var(--text-dark);
+  position: relative;
+}
+
+.nav a:hover {
+  color: var(--primary-yellow);
+}
+
+.nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-yellow);
+  transition: width 0.3s ease;
+}
+
+.nav a:hover::after {
+  width: 100%;
+}
+
+.btn-call-header {
+  background: var(--primary-yellow);
+  color: var(--primary-dark);
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(253, 185, 19, 0.3);
+}
+
+.btn-call-header::after {
+  display: none;
+}
+
+.btn-call-header:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(253, 185, 19, 0.4);
+  color: var(--primary-yellow);
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.5rem;
+    box-shadow: 0 10px 30px var(--shadow);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .nav-open {
+    transform: translateX(0);
+  }
+
+  .btn-call-header {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+}

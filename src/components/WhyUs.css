@@ -1,0 +1,118 @@
+.why-us {
+  background: var(--white);
+}
+
+.about-intro {
+  max-width: 900px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+
+.about-intro p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--text-gray);
+  font-weight: 400;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+.feature-card {
+  text-align: center;
+  padding: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, rgba(253, 185, 19, 0.1), rgba(229, 165, 10, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-yellow);
+  margin: 0 auto 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  background: linear-gradient(135deg, var(--primary-yellow), var(--accent-yellow-dark));
+  color: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.feature-card h3 {
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  font-size: 1.375rem;
+}
+
+.feature-card p {
+  color: var(--text-gray);
+  line-height: 1.7;
+}
+
+.brands-section {
+  text-align: center;
+  padding: 3rem 0;
+  background: var(--bg-light);
+  border-radius: 16px;
+}
+
+.brands-section h3 {
+  color: var(--text-dark);
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+}
+
+.brands {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-gray);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.brand:hover {
+  opacity: 1;
+  color: var(--primary-yellow);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+
+  .brands {
+    gap: 2rem;
+  }
+
+  .brand {
+    font-size: 1.25rem;
+  }
+}
