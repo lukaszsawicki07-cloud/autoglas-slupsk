@@ -29,6 +29,8 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     setLoading(true);
 
     try {
+      console.log('Attempting to call RPC function...');
+
       const { data, error } = await supabase.rpc('get_quote_requests_admin', {
         admin_pin: pin
       });
@@ -37,6 +39,7 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
 
       if (error) {
         console.error('RPC Error:', error);
+        setPinError(`Błąd: ${error.message}`);
         throw error;
       }
 
@@ -47,7 +50,9 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
       }
     } catch (err: any) {
       console.error('Error authenticating:', err);
-      setPinError(err.message || 'Nieprawidłowy PIN');
+      console.error('Error type:', err.constructor.name);
+      console.error('Error details:', JSON.stringify(err, null, 2));
+      setPinError(err.message || 'Błąd połączenia z serwerem. Sprawdź konsolę dla szczegółów.');
     } finally {
       setLoading(false);
     }
