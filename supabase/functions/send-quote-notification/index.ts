@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -37,14 +38,21 @@ Deno.serve(async (req: Request) => {
       vehicle: data.vehicle,
     });
 
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    if (!resendApiKey) {
-      console.error("RESEND_API_KEY not configured");
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: resendApiKey, error: secretError } = await supabase
+      .rpc('get_resend_api_key');
+
+    if (secretError || !resendApiKey) {
+      console.error("Failed to get RESEND_API_KEY from vault:", secretError);
       return new Response(
         JSON.stringify({
           success: false,
           error: "Email service not configured",
+          details: secretError?.message
         }),
         {
           status: 500,
