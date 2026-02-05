@@ -91,7 +91,7 @@ Skontaktuj się z klientem jak najszybciej!
           Authorization: `Bearer ${resendApiKey}`,
         },
         body: JSON.stringify({
-          from: "Auto Glas Słupsk <powiadomienia@autoglasslupsk.pl>",
+          from: "Auto Glas Słupsk <noreply@autoglasslupsk.pl>",
           to: [to],
           subject: `🔔 Nowe zapytanie od ${data.name}`,
           html: emailHtml,
