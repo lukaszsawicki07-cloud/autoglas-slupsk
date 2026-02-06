@@ -1,25 +1,28 @@
 import { Car, Truck, TramFront } from 'lucide-react';
 import './VehicleTypes.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const VehicleTypes = () => {
+  const { t } = useLanguage();
+
   const vehicles = [
     {
       icon: <Car size={48} />,
-      title: 'Samochody Osobowe',
-      description: 'Wszystkie marki i modele. Szyby przednie, boczne i tylne.',
-      details: ['Audi, BMW, Mercedes', 'Toyota, Honda, Ford', 'Pojazdy premium i popularne']
+      titleKey: 'vehicleTypes.passengerCars.title',
+      descriptionKey: 'vehicleTypes.passengerCars.description',
+      detailsKey: 'vehicleTypes.passengerCars.details'
     },
     {
       icon: <Truck size={48} />,
-      title: 'Samochody Ciężarowe',
-      description: 'Dostawcze, TIR-y i pojazdy specjalne. Profesjonalny montaż.',
-      details: ['Mercedes Actros, Volvo FH', 'MAN, Scania, DAF', 'Iveco, Renault Trucks']
+      titleKey: 'vehicleTypes.trucks.title',
+      descriptionKey: 'vehicleTypes.trucks.description',
+      detailsKey: 'vehicleTypes.trucks.details'
     },
     {
       icon: <TramFront size={48} />,
-      title: 'Maszyny Budowlane',
-      description: 'Koparki, ładowarki, ciągniki rolnicze i maszyny specjalistyczne.',
-      details: ['CAT, JCB, Komatsu', 'John Deere, Case', 'Liebherr, Volvo']
+      titleKey: 'vehicleTypes.construction.title',
+      descriptionKey: 'vehicleTypes.construction.description',
+      detailsKey: 'vehicleTypes.construction.details'
     }
   ];
 
@@ -27,25 +30,28 @@ const VehicleTypes = () => {
     <section id="pojazdy" className="vehicle-types">
       <div className="container">
         <div className="section-header">
-          <h2>Obsługiwane Pojazdy</h2>
-          <p>Wymieniamy szyby w każdym typie pojazdu - od małego osobowego po ogromną koparkę</p>
+          <h2>{t('vehicleTypes.title')}</h2>
+          <p>{t('vehicleTypes.subtitle')}</p>
         </div>
 
         <div className="vehicle-grid">
-          {vehicles.map((vehicle, index) => (
-            <div key={index} className="vehicle-card">
-              <div className="vehicle-icon">
-                {vehicle.icon}
+          {vehicles.map((vehicle, index) => {
+            const details = t(vehicle.detailsKey) as unknown as string[];
+            return (
+              <div key={index} className="vehicle-card">
+                <div className="vehicle-icon">
+                  {vehicle.icon}
+                </div>
+                <h3>{t(vehicle.titleKey)}</h3>
+                <p className="vehicle-description">{t(vehicle.descriptionKey)}</p>
+                <ul className="vehicle-details">
+                  {details.map((detail, i) => (
+                    <li key={i}>{detail}</li>
+                  ))}
+                </ul>
               </div>
-              <h3>{vehicle.title}</h3>
-              <p className="vehicle-description">{vehicle.description}</p>
-              <ul className="vehicle-details">
-                {vehicle.details.map((detail, i) => (
-                  <li key={i}>{detail}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

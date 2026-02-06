@@ -1,41 +1,44 @@
 import './Gallery.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Gallery = () => {
+  const { t } = useLanguage();
+
   const projects = [
     {
-      title: 'Audi A6',
-      category: 'Samochód Osobowy Premium',
-      description: 'Wymiana szyby czołowej z kalibracją ADAS',
+      titleKey: 'gallery.projects.audiA6.title',
+      categoryKey: 'gallery.projects.audiA6.category',
+      descriptionKey: 'gallery.projects.audiA6.description',
       image: '/1000074390.jpg'
     },
     {
-      title: 'Volvo FH',
-      category: 'Samochód Ciężarowy',
-      description: 'Kompleksowa wymiana szyb w kabinie',
+      titleKey: 'gallery.projects.volvoFH.title',
+      categoryKey: 'gallery.projects.volvoFH.category',
+      descriptionKey: 'gallery.projects.volvoFH.description',
       image: '/volvo_fh.jpg'
     },
     {
-      title: 'Porsche 928',
-      category: 'Samochód Osobowy Klasyczny',
-      description: 'Wymiana szyby czołowej',
+      titleKey: 'gallery.projects.porsche928.title',
+      categoryKey: 'gallery.projects.porsche928.category',
+      descriptionKey: 'gallery.projects.porsche928.description',
       image: '/20250401_171028.jpg'
     },
     {
-      title: 'Mercedes-Benz E-Class',
-      category: 'Samochód Osobowy Premium',
-      description: 'Wymiana szyby czołowej',
+      titleKey: 'gallery.projects.mercedesE.title',
+      categoryKey: 'gallery.projects.mercedesE.category',
+      descriptionKey: 'gallery.projects.mercedesE.description',
       image: '/benze.jpg'
     },
     {
-      title: 'Mercedes Sprinter',
-      category: 'Samochód Dostawczy',
-      description: 'Wymiana szyby bocznej',
+      titleKey: 'gallery.projects.sprinter.title',
+      categoryKey: 'gallery.projects.sprinter.category',
+      descriptionKey: 'gallery.projects.sprinter.description',
       image: '/mercedessprinter.jpg'
     },
     {
-      title: 'System ADAS (Advanced Driver Assistance Systems)',
-      category: 'Samochód z Systemem',
-      description: 'Konfiguracja aktywnych systemów bezpieczeństwa',
+      titleKey: 'gallery.projects.adas.title',
+      categoryKey: 'gallery.projects.adas.category',
+      descriptionKey: 'gallery.projects.adas.description',
       image: '/20250811_143253.jpg'
     }
   ];
@@ -44,8 +47,8 @@ const Gallery = () => {
     <section id="realizacje" className="gallery">
       <div className="container">
         <div className="section-header">
-          <h2>Nasze Realizacje</h2>
-          <p>Zobacz przykładowe projekty - od luksusowych aut po ogromne maszyny</p>
+          <h2>{t('gallery.title')}</h2>
+          <p>{t('gallery.subtitle')}</p>
         </div>
 
         <div className="gallery-grid">
@@ -54,14 +57,14 @@ const Gallery = () => {
               <div className="gallery-image">
                 <img
                   src={project.image}
-                  alt={project.title}
+                  alt={t(project.titleKey)}
                   loading="lazy"
                 />
               </div>
               <div className="gallery-content">
-                <span className="gallery-category">{project.category}</span>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
+                <span className="gallery-category">{t(project.categoryKey)}</span>
+                <h3>{t(project.titleKey)}</h3>
+                <p>{t(project.descriptionKey)}</p>
               </div>
             </div>
           ))}

@@ -1,11 +1,13 @@
 import { Phone, FileText } from 'lucide-react';
 import './Hero.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface HeroProps {
   onQuoteClick: () => void;
 }
 
 const Hero = ({ onQuoteClick }: HeroProps) => {
+  const { language } = useLanguage();
   const phoneNumber = "+48 502 557 767";
 
   return (
@@ -14,29 +16,32 @@ const Hero = ({ onQuoteClick }: HeroProps) => {
       <div className="container hero-content">
         <div className="hero-text">
           <h1 className="hero-title">
-            Wymiana i Naprawa Szyb<br />
-            w Każdym Pojeździe
+            {language === 'pl' ? (
+              <>Wymiana i Naprawa Szyb<br />w Każdym Pojeździe</>
+            ) : (
+              <>Car Glass Repair and Replacement<br />For All Vehicle Types</>
+            )}
           </h1>
           <p className="hero-subtitle">
-            Szybko, Profesjonalnie, Kompleksowo
+            {language === 'pl' ? 'Szybko, Profesjonalnie, Kompleksowo' : 'Fast, Professional, Comprehensive'}
           </p>
           <p className="hero-description">
-            Osobowe • Ciężarowe • Maszyny Budowlane
+            {language === 'pl' ? 'Osobowe • Ciężarowe • Maszyny Budowlane' : 'Cars • Trucks • Construction Equipment'}
           </p>
           <div className="hero-cta">
             <a href={`tel:${phoneNumber}`} className="btn btn-primary">
               <Phone size={20} />
-              Zadzwoń Teraz
+              {language === 'pl' ? 'Zadzwoń Teraz' : 'Call Now'}
             </a>
             <button onClick={onQuoteClick} className="btn btn-secondary">
               <FileText size={20} />
-              Szybka Wycena
+              {language === 'pl' ? 'Szybka Wycena' : 'Quick Quote'}
             </button>
           </div>
           <div className="hero-features">
-            <div className="feature-badge">Markowe Szyby</div>
-            <div className="feature-badge">Kalibracja ADAS</div>
-            <div className="feature-badge">Gwarancja Jakości</div>
+            <div className="feature-badge">{language === 'pl' ? 'Markowe Szyby' : 'Branded Glass'}</div>
+            <div className="feature-badge">{language === 'pl' ? 'Kalibracja ADAS' : 'ADAS Calibration'}</div>
+            <div className="feature-badge">{language === 'pl' ? 'Gwarancja Jakości' : 'Quality Guarantee'}</div>
           </div>
         </div>
       </div>

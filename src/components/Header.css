@@ -96,6 +96,26 @@
   width: 100%;
 }
 
+.language-switcher {
+  background: transparent;
+  border: 2px solid var(--text-dark);
+  color: var(--text-dark);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.language-switcher:hover {
+  background: var(--text-dark);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
 .btn-call-header {
   background: var(--primary-yellow);
   color: var(--primary-dark);

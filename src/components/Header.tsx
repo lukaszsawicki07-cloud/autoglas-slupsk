@@ -1,9 +1,11 @@
-import { Phone, MapPin, Menu, X } from 'lucide-react';
+import { Phone, MapPin, Menu, X, Globe } from 'lucide-react';
 import { useState } from 'react';
 import './Header.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
   const phoneNumber = "+48 502 557 767";
 
   return (
@@ -38,13 +40,21 @@ const Header = () => {
           </button>
 
           <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
-            <a href="#oferta" onClick={() => setIsMenuOpen(false)}>Oferta</a>
-            <a href="#pojazdy" onClick={() => setIsMenuOpen(false)}>Pojazdy</a>
-            <a href="#realizacje" onClick={() => setIsMenuOpen(false)}>Realizacje</a>
-            <a href="#kontakt" onClick={() => setIsMenuOpen(false)}>Kontakt</a>
+            <a href="#oferta" onClick={() => setIsMenuOpen(false)}>{t('header.services')}</a>
+            <a href="#pojazdy" onClick={() => setIsMenuOpen(false)}>{t('vehicleTypes.title')}</a>
+            <a href="#realizacje" onClick={() => setIsMenuOpen(false)}>{t('header.gallery')}</a>
+            <a href="#kontakt" onClick={() => setIsMenuOpen(false)}>{t('header.contact')}</a>
+            <button
+              className="language-switcher"
+              onClick={() => setLanguage(language === 'pl' ? 'en' : 'pl')}
+              aria-label="Change language"
+            >
+              <Globe size={18} />
+              {language === 'pl' ? 'EN' : 'PL'}
+            </button>
             <a href={`tel:${phoneNumber}`} className="btn-call-header">
               <Phone size={18} />
-              Zadzwoń
+              {language === 'pl' ? 'Zadzwoń' : 'Call'}
             </a>
           </nav>
         </div>

@@ -2,6 +2,7 @@ import { X, Upload, User, Phone, Car, Mail } from 'lucide-react';
 import { useState } from 'react';
 import './QuoteForm.css';
 import { supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface QuoteFormProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface QuoteFormProps {
 }
 
 const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
+  const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -87,13 +89,13 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
         console.error('Error sending notification:', emailError);
       }
 
-      alert('Dziękujemy! Skontaktujemy się z Tobą w ciągu 30 minut.');
+      alert(t('quoteForm.success'));
       onClose();
       setFormData({ name: '', phone: '', email: '', vehicle: '', vin: '', description: '' });
       setSelectedFile(null);
     } catch (err) {
       console.error('Error submitting form:', err);
-      setError('Wystąpił błąd podczas wysyłania formularza. Spróbuj ponownie.');
+      setError(t('quoteForm.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -115,15 +117,15 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
         </button>
 
         <div className="modal-header">
-          <h2>Szybka Wycena</h2>
-          <p>Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 30 minut</p>
+          <h2>{t('quoteForm.title')}</h2>
+          <p>{language === 'pl' ? 'Wypełnij formularz, a skontaktujemy się z Tobą w ciągu 30 minut' : 'Fill out the form and we will contact you within 30 minutes'}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="quote-form">
           <div className="form-group">
             <label htmlFor="name">
               <User size={18} />
-              Imię i Nazwisko
+              {t('quoteForm.name')}
             </label>
             <input
               type="text"
@@ -131,7 +133,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              placeholder="Jan Kowalski"
+              placeholder={language === 'pl' ? 'Jan Kowalski' : 'John Doe'}
             />
           </div>
 
@@ -139,7 +141,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
             <div className="form-group">
               <label htmlFor="phone">
                 <Phone size={18} />
-                Telefon
+                {t('quoteForm.phone')}
               </label>
               <input
                 type="tel"
@@ -154,7 +156,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
             <div className="form-group">
               <label htmlFor="email">
                 <Mail size={18} />
-                Email
+                {t('quoteForm.email')}
               </label>
               <input
                 type="email"
@@ -169,7 +171,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
           <div className="form-group">
             <label htmlFor="vehicle">
               <Car size={18} />
-              Pojazd
+              {t('quoteForm.vehicle')}
             </label>
             <input
               type="text"
@@ -177,34 +179,34 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
               value={formData.vehicle}
               onChange={(e) => setFormData({ ...formData, vehicle: e.target.value })}
               required
-              placeholder="np. Toyota Yaris 2018"
+              placeholder={language === 'pl' ? 'np. Toyota Yaris 2018' : 'e.g. Toyota Yaris 2018'}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="vin">
-              Numer VIN (opcjonalnie)
+              {language === 'pl' ? 'Numer VIN (opcjonalnie)' : 'VIN Number (optional)'}
             </label>
             <input
               type="text"
               id="vin"
               value={formData.vin}
               onChange={(e) => setFormData({ ...formData, vin: e.target.value })}
-              placeholder="17 znaków"
+              placeholder={language === 'pl' ? '17 znaków' : '17 characters'}
               maxLength={17}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="description">
-              Opis uszkodzenia
+              {t('quoteForm.description')}
             </label>
             <textarea
               id="description"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               required
-              placeholder="Opisz uszkodzenie szyby..."
+              placeholder={language === 'pl' ? 'Opisz uszkodzenie szyby...' : 'Describe the glass damage...'}
               rows={4}
             />
           </div>
@@ -212,7 +214,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
           <div className="form-group">
             <label htmlFor="photo" className="file-upload-label">
               <Upload size={18} />
-              Zdjęcie uszkodzenia (opcjonalnie)
+              {language === 'pl' ? 'Zdjęcie uszkodzenia (opcjonalnie)' : 'Damage photo (optional)'}
             </label>
             <input
               type="file"
@@ -223,7 +225,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
             />
             {selectedFile && (
               <div className="file-selected">
-                Wybrano: {selectedFile.name}
+                {language === 'pl' ? 'Wybrano:' : 'Selected:'} {selectedFile.name}
               </div>
             )}
           </div>
@@ -235,7 +237,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
           )}
 
           <button type="submit" className="btn-submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Wysyłanie...' : 'Wyślij zapytanie'}
+            {isSubmitting ? t('quoteForm.sending') : t('quoteForm.submit')}
           </button>
         </form>
       </div>

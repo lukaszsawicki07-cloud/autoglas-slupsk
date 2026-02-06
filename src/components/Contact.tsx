@@ -1,7 +1,9 @@
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import './Contact.css';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Contact = () => {
+  const { t } = useLanguage();
   const phoneNumber = "+48 502 557 767";
   const email = "autoglasslupsk@gmail.com";
 
@@ -9,8 +11,8 @@ const Contact = () => {
     <section id="kontakt" className="contact">
       <div className="container">
         <div className="section-header">
-          <h2>Kontakt</h2>
-          <p>Skontaktuj się z nami - odpowiemy na wszystkie pytania</p>
+          <h2>{t('contact.title')}</h2>
+          <p>{t('contact.subtitle')}</p>
         </div>
 
         <div className="contact-content">
@@ -19,45 +21,43 @@ const Contact = () => {
               <div className="contact-icon">
                 <Phone size={28} />
               </div>
-              <h3>Telefon</h3>
+              <h3>{t('contact.phone')}</h3>
               <a href={`tel:${phoneNumber}`} className="contact-link">
                 {phoneNumber}
               </a>
-              <p>Zadzwoń lub napisz SMS</p>
+              <p>{t('contact.phoneDesc')}</p>
             </div>
 
             <div className="contact-card">
               <div className="contact-icon">
                 <Mail size={28} />
               </div>
-              <h3>Email</h3>
+              <h3>{t('contact.email')}</h3>
               <a href={`mailto:${email}`} className="contact-link">
                 {email}
               </a>
-              <p>Odpowiadamy w 24h</p>
+              <p>{t('contact.emailDesc')}</p>
             </div>
 
             <div className="contact-card">
               <div className="contact-icon">
                 <MapPin size={28} />
               </div>
-              <h3>Adres</h3>
+              <h3>{t('contact.address')}</h3>
               <p className="contact-address">
                 ul. Kniaziewicza 1/1<br />
                 76-200 Słupsk
               </p>
-              <p>Parking dla klientów</p>
+              <p>{t('contact.addressDesc')}</p>
             </div>
 
             <div className="contact-card">
               <div className="contact-icon">
                 <Clock size={28} />
               </div>
-              <h3>Godziny Otwarcia</h3>
-              <p className="contact-hours">
-                Pn-Pt: 8:00 - 17:00<br />
-                Sobota: Nieczynne<br />
-                Niedziela: Nieczynne
+              <h3>{t('contact.hours')}</h3>
+              <p className="contact-hours" style={{ whiteSpace: 'pre-line' }}>
+                {t('contact.hoursValue')}
               </p>
             </div>
           </div>
@@ -77,7 +77,7 @@ const Contact = () => {
         </div>
 
         <div className="company-info">
-          <h3>Dane Firmowe</h3>
+          <h3>{t('contact.companyInfo')}</h3>
           <div className="company-details">
             <p><strong>Auto-Glas Słupsk Sp. z o.o.</strong></p>
             <p>NIP: 8392961720</p>
