@@ -3,6 +3,7 @@ import { useState } from 'react';
 import './QuoteForm.css';
 import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
+import { trackEvent } from '../lib/analytics';
 
 interface QuoteFormProps {
   isOpen: boolean;
@@ -89,6 +90,7 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
         console.error('Error sending notification:', emailError);
       }
 
+      trackEvent('quote_submit');
       alert(t('quoteForm.success'));
       onClose();
       setFormData({ name: '', phone: '', email: '', vehicle: '', vin: '', description: '' });
