@@ -29,7 +29,7 @@ interface DashboardData {
   totalClicks: number;
   totalQuoteOpens: number;
   totalQuoteSubmits: number;
-  maxScrollDepth: number;
+  avgScrollDepth: number;
   sectionStats: SectionStat[];
   abResults: ABResult[];
   dailyVisitors: { day: string; count: number }[];
@@ -40,7 +40,7 @@ const EMPTY: DashboardData = {
   totalClicks: 0,
   totalQuoteOpens: 0,
   totalQuoteSubmits: 0,
-  maxScrollDepth: 0,
+  avgScrollDepth: 0,
   sectionStats: [],
   abResults: [],
   dailyVisitors: [],
@@ -61,43 +61,25 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ isOpen, onClose
     const since = new Date(Date.now() - range * 24 * 60 * 60 * 1000).toISOString();
 
     const [
-      { count: totalSessions },
-      { data: eventCounts },
-      { data: scrollData },
-      { data: sectionData },
-      { data: abData },
-      { data: dailyData },
+      { data: summary },
+      { data: sections },
+      { data: daily },
+      { data: abVariants },
     ] = await Promise.all([
-      supabase.from('analytics_sessions').select('*', { count: 'exact', head: true }).gte('created_at', since),
-      supabase.from('analytics_events').select('event_type').in('event_type', ['click', 'quote_open', 'quote_submit']).gte('created_at', since),
-      supabase.from('analytics_events').select('scroll_depth').eq('event_type', 'scroll').gte('created_at', since),
-      supabase.from('analytics_events').select('section, time_on_section_ms').eq('event_type', 'section_view').gte('created_at', since),
-      supabase.from('ab_variants').select('test_id, name, description, impressions, conversions, ab_tests(name)'),
-      supabase.from('analytics_sessions').select('created_at').gte('created_at', since),
+      supabase.rpc('get_analytics_summary', { p_since: since }),
+      supabase.rpc('get_section_stats', { p_since: since }),
+      supabase.rpc('get_daily_sessions', { p_since: since }),
+      supabase.from('ab_variants').select('name, description, impressions, conversions, ab_tests(name)'),
     ]);
 
-    const clicks = eventCounts?.filter(e => e.event_type === 'click').length || 0;
-    const quoteOpens = eventCounts?.filter(e => e.event_type === 'quote_open').length || 0;
-    const quoteSubmits = eventCounts?.filter(e => e.event_type === 'quote_submit').length || 0;
-    const maxScroll = scrollData && scrollData.length > 0
-      ? Math.round(scrollData.reduce((sum, r) => sum + r.scroll_depth, 0) / scrollData.length)
-      : 0;
+    const sectionStats: SectionStat[] = (sections || []).map((s: any) => ({
+      section: s.section,
+      views: Number(s.views),
+      avg_time_ms: Number(s.avg_time_ms),
+    }));
 
-    // Aggregate section stats
-    const sectionMap: Record<string, { views: number; totalMs: number }> = {};
-    for (const row of sectionData || []) {
-      if (!row.section) continue;
-      if (!sectionMap[row.section]) sectionMap[row.section] = { views: 0, totalMs: 0 };
-      sectionMap[row.section].views += 1;
-      sectionMap[row.section].totalMs += row.time_on_section_ms || 0;
-    }
-    const sectionStats: SectionStat[] = Object.entries(sectionMap)
-      .map(([section, v]) => ({ section, views: v.views, avg_time_ms: Math.round(v.totalMs / v.views) }))
-      .sort((a, b) => b.views - a.views);
-
-    // A/B results
-    const abResults: ABResult[] = (abData || []).map(v => ({
-      test_name: (v.ab_tests as any)?.name || '',
+    const abResults: ABResult[] = (abVariants || []).map((v: any) => ({
+      test_name: v.ab_tests?.name || '',
       variant_name: v.name,
       description: v.description,
       impressions: v.impressions,
@@ -105,22 +87,17 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ isOpen, onClose
       cvr: v.impressions > 0 ? Math.round((v.conversions / v.impressions) * 1000) / 10 : 0,
     }));
 
-    // Daily visitors
-    const dayMap: Record<string, number> = {};
-    for (const row of dailyData || []) {
-      const day = row.created_at.slice(0, 10);
-      dayMap[day] = (dayMap[day] || 0) + 1;
-    }
-    const dailyVisitors = Object.entries(dayMap)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([day, count]) => ({ day, count }));
+    const dailyVisitors = (daily || []).map((d: any) => ({
+      day: d.day,
+      count: Number(d.cnt),
+    }));
 
     setData({
-      totalSessions: totalSessions || 0,
-      totalClicks: clicks,
-      totalQuoteOpens: quoteOpens,
-      totalQuoteSubmits: quoteSubmits,
-      maxScrollDepth: maxScroll,
+      totalSessions: summary?.total_sessions || 0,
+      totalClicks: summary?.total_clicks || 0,
+      totalQuoteOpens: summary?.quote_opens || 0,
+      totalQuoteSubmits: summary?.quote_submits || 0,
+      avgScrollDepth: summary?.avg_scroll || 0,
       sectionStats,
       abResults,
       dailyVisitors,
@@ -196,7 +173,7 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ isOpen, onClose
                 <div className="kpi-card">
                   <BarChart2 size={28} />
                   <div>
-                    <span className="kpi-value">{data.maxScrollDepth}%</span>
+                    <span className="kpi-value">{data.avgScrollDepth}%</span>
                     <span className="kpi-label">Śr. głębokość scrolla</span>
                   </div>
                 </div>

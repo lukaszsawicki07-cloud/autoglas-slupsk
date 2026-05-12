@@ -22,11 +22,11 @@ export async function initSession(language: string): Promise<void> {
 
   await supabase.from('analytics_sessions').upsert({
     id,
-    referrer: document.referrer || '',
+    referrer: document.referrer.slice(0, 512),
     utm_source: params.get('utm_source') || '',
     utm_medium: params.get('utm_medium') || '',
     utm_campaign: params.get('utm_campaign') || '',
-    user_agent: navigator.userAgent,
+    user_agent: navigator.userAgent.slice(0, 512),
     language,
   }, { onConflict: 'id', ignoreDuplicates: true });
 }
@@ -49,16 +49,16 @@ export async function trackClick(x: number, y: number, section: string): Promise
     click_y: Math.round(y),
     page_width: window.innerWidth,
     page_height: document.documentElement.scrollHeight,
-    section,
+    section: section.slice(0, 64),
   });
 }
 
 export async function trackSectionView(section: string, timeMs: number): Promise<void> {
-  await trackEvent('section_view', { section, time_on_section_ms: timeMs });
+  await trackEvent('section_view', { section: section.slice(0, 64), time_on_section_ms: timeMs });
 }
 
 export async function trackScrollDepth(depth: number): Promise<void> {
-  await trackEvent('scroll', { scroll_depth: depth });
+  await trackEvent('scroll', { scroll_depth: Math.max(0, Math.min(100, depth)) });
 }
 
 // A/B Testing
@@ -69,42 +69,37 @@ const abCache: Record<string, ABVariant | null> = {};
 export async function getABVariant(testName: string): Promise<ABVariant | null> {
   if (testName in abCache) return abCache[testName];
 
-  const { data: test } = await supabase
-    .from('ab_tests')
-    .select('id')
-    .eq('name', testName)
-    .eq('is_active', true)
-    .maybeSingle();
-
-  if (!test) { abCache[testName] = null; return null; }
-
-  const { data: variants } = await supabase
-    .from('ab_variants')
-    .select('id, name, description, weight, impressions')
-    .eq('test_id', test.id);
+  // Use secure RPC instead of direct table access
+  const { data: variants } = await supabase.rpc('get_active_ab_variants', {
+    p_test_name: testName,
+  });
 
   if (!variants || variants.length === 0) { abCache[testName] = null; return null; }
 
   // Deterministic assignment based on session id + test name
   const sessionId = getOrCreateSessionId();
   const hash = [...(sessionId + testName)].reduce((acc, c) => acc + c.charCodeAt(0), 0);
-  const totalWeight = variants.reduce((s, v) => s + v.weight, 0);
+  const totalWeight = variants.reduce((s: number, v: { variant_weight: number }) => s + v.variant_weight, 0);
   let bucket = hash % totalWeight;
   let chosen = variants[0];
   for (const v of variants) {
-    bucket -= v.weight;
+    bucket -= v.variant_weight;
     if (bucket < 0) { chosen = v; break; }
   }
 
-  abCache[testName] = { id: chosen.id, name: chosen.name, description: chosen.description };
+  abCache[testName] = {
+    id: chosen.variant_id,
+    name: chosen.variant_name,
+    description: chosen.variant_description,
+  };
 
-  // Track impression (fire-and-forget)
-  supabase.from('ab_variants')
-    .update({ impressions: chosen.impressions + 1 })
-    .eq('id', chosen.id)
-    .then(() => {});
+  // Increment impression via secure RPC
+  supabase.rpc('increment_ab_variant', {
+    p_variant_id: chosen.variant_id,
+    p_field: 'impressions',
+  }).then(() => {});
 
-  trackEvent('ab_impression', { ab_test_name: testName, ab_variant_name: chosen.name });
+  trackEvent('ab_impression', { ab_test_name: testName, ab_variant_name: chosen.variant_name });
 
   return abCache[testName];
 }
@@ -113,18 +108,10 @@ export async function trackABConversion(testName: string): Promise<void> {
   const variant = abCache[testName];
   if (!variant) return;
 
-  const { data } = await supabase
-    .from('ab_variants')
-    .select('conversions')
-    .eq('id', variant.id)
-    .maybeSingle();
-
-  if (data) {
-    supabase.from('ab_variants')
-      .update({ conversions: data.conversions + 1 })
-      .eq('id', variant.id)
-      .then(() => {});
-  }
+  supabase.rpc('increment_ab_variant', {
+    p_variant_id: variant.id,
+    p_field: 'conversions',
+  }).then(() => {});
 
   trackEvent('ab_conversion', { ab_test_name: testName, ab_variant_name: variant.name });
 }

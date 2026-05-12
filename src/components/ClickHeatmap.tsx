@@ -24,11 +24,8 @@ const ClickHeatmap: React.FC<ClickHeatmapProps> = ({ isVisible, onClose }) => {
 
   async function loadAndDraw() {
     setLoading(true);
-    const { data } = await supabase
-      .from('analytics_events')
-      .select('click_x, click_y, page_width, page_height')
-      .eq('event_type', 'click')
-      .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString());
+    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const { data } = await supabase.rpc('get_heatmap_clicks', { p_since: since });
 
     setLoading(false);
     if (!data || data.length === 0) return;
@@ -46,7 +43,7 @@ const ClickHeatmap: React.FC<ClickHeatmapProps> = ({ isVisible, onClose }) => {
 
     ctx.clearRect(0, 0, vw, vh);
 
-    const points: HeatmapPoint[] = data.map(d => ({
+    const points: HeatmapPoint[] = data.map((d: { click_x: number; click_y: number; page_width: number; page_height: number }) => ({
       x: (d.click_x / (d.page_width || vw)) * vw,
       y: (d.click_y / (d.page_height || document.documentElement.scrollHeight)) * vh,
       weight: 1,
