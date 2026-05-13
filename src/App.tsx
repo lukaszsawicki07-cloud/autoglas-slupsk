@@ -15,6 +15,7 @@ import ClickHeatmap from './components/ClickHeatmap';
 import SectionTracker from './components/SectionTracker';
 import { initSession, trackClick, trackScrollDepth, trackEvent } from './lib/analytics';
 import { useLanguage } from './contexts/LanguageContext';
+import { DynamicContentProvider } from './contexts/DynamicContentContext';
 
 interface AdminPanelWindow extends Window {
   openAdminPanel?: () => void;
@@ -97,7 +98,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <DynamicContentProvider language={language}>
       <Header />
       <main>
         <SectionTracker sectionId="hero"><div data-section="hero"><Hero onQuoteClick={handleQuoteOpen} /></div></SectionTracker>
@@ -126,7 +127,7 @@ function App() {
         isVisible={isHeatmapVisible}
         onClose={() => setIsHeatmapVisible(false)}
       />
-    </>
+    </DynamicContentProvider>
   );
 }
 
