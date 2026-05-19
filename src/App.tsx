@@ -108,7 +108,7 @@ function App() {
         <SectionTracker sectionId="reviews"><div data-section="reviews"><Reviews /></div></SectionTracker>
         <SectionTracker sectionId="contact"><div data-section="contact"><Contact /></div></SectionTracker>
       </main>
-      <Footer />
+      <Footer onAdminOpen={() => setIsAdminPanelOpen(true)} />
       <WhatsAppButton />
       <QuoteForm
         isOpen={isQuoteFormOpen}

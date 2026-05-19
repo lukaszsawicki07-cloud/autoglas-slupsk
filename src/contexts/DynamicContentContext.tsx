@@ -45,12 +45,14 @@ interface DynamicContentContextType {
   hero: HeroContent;
   matchedRule: ContentRule | null;
   utmParams: Record<string, string>;
+  reloadRules: () => void;
 }
 
 const DynamicContentContext = createContext<DynamicContentContextType>({
   hero: { title: null, subtitle: null, description: null, ctaPrimary: null, ctaSecondary: null, badge1: null, badge2: null, badge3: null },
   matchedRule: null,
   utmParams: {},
+  reloadRules: () => {},
 });
 
 function getUtmParams(): Record<string, string> {
@@ -93,17 +95,17 @@ const EMPTY_HERO: HeroContent = {
 export const DynamicContentProvider: React.FC<{ language: string; children: ReactNode }> = ({ language, children }) => {
   const [matchedRule, setMatchedRule] = useState<ContentRule | null>(null);
   const [hero, setHero] = useState<HeroContent>(EMPTY_HERO);
-  const utmParams = getUtmParams();
+  const utmParams = React.useMemo(() => getUtmParams(), []);
 
-  useEffect(() => {
+  const loadRules = React.useCallback(() => {
     supabase.rpc('get_active_content_rules').then(({ data }) => {
-      if (!data || data.length === 0) return;
-      // Rules arrive sorted by priority DESC — first match wins
-      const match = (data as ContentRule[]).find(r => ruleMatches(r, utmParams)) ?? null;
+      const match = data ? (data as ContentRule[]).find(r => ruleMatches(r, utmParams)) ?? null : null;
       setMatchedRule(match);
       setHero(match ? extractHero(match, language) : EMPTY_HERO);
     });
-  }, []);
+  }, [language, utmParams]);
+
+  useEffect(() => { loadRules(); }, [loadRules]);
 
   // Re-derive hero overrides when language changes
   useEffect(() => {
@@ -111,7 +113,7 @@ export const DynamicContentProvider: React.FC<{ language: string; children: Reac
   }, [language, matchedRule]);
 
   return (
-    <DynamicContentContext.Provider value={{ hero, matchedRule, utmParams }}>
+    <DynamicContentContext.Provider value={{ hero, matchedRule, utmParams, reloadRules: loadRules }}>
       {children}
     </DynamicContentContext.Provider>
   );

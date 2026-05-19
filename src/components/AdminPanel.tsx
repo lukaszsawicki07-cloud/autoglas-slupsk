@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { X, Phone, Mail, Car, Calendar, CheckCircle, Clock, MessageSquare, Layers, Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react';
+import { X, Phone, Mail, Car, Calendar, CheckCircle, Clock, MessageSquare, Layers, Plus, Trash2, ToggleLeft, ToggleRight, Eye } from 'lucide-react';
 import { supabase, QuoteRequest } from '../lib/supabase';
-import { ContentRule } from '../contexts/DynamicContentContext';
+import { ContentRule, useDynamicContent } from '../contexts/DynamicContentContext';
 import './AdminPanel.css';
 
 interface AdminPanelProps {
@@ -24,6 +24,7 @@ const EMPTY_RULE: Omit<ContentRule, 'id' | 'created_at' | 'updated_at'> = {
 type AdminTab = 'quotes' | 'content';
 
 const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
+  const { reloadRules } = useDynamicContent();
   const [activeTab, setActiveTab] = useState<AdminTab>('quotes');
   const [requests, setRequests] = useState<QuoteRequest[]>([]);
   const [loading, setLoading] = useState(false);
@@ -38,6 +39,7 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
   const [rulesLoading, setRulesLoading] = useState(false);
   const [editingRule, setEditingRule] = useState<Partial<ContentRule> | null>(null);
   const [ruleError, setRuleError] = useState<string | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     if (isOpen && isAuthenticated) {
@@ -97,7 +99,9 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     });
     if (error) { setRuleError(error.message); return; }
     setEditingRule(null);
+    setShowPreview(false);
     fetchRules();
+    reloadRules();
   };
 
   const deleteRule = async (id: string) => {
@@ -331,12 +335,47 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                         </section>
                       </div>
 
+                      {showPreview && (
+                        <div className="cr-live-preview">
+                          <div className="cr-live-preview-label">Podgląd Hero (PL)</div>
+                          <div className="cr-live-preview-hero">
+                            <div className="cr-preview-title">
+                              {editingRule.hero_title_pl || 'Wymiana i Naprawa Szyb\nw Każdym Pojeździe'}
+                            </div>
+                            {editingRule.hero_subtitle_pl && (
+                              <div className="cr-preview-subtitle">{editingRule.hero_subtitle_pl}</div>
+                            )}
+                            {editingRule.hero_description_pl && (
+                              <div className="cr-preview-desc">{editingRule.hero_description_pl}</div>
+                            )}
+                            <div className="cr-preview-ctas">
+                              <span className="cr-preview-btn cr-preview-btn--primary">
+                                {editingRule.hero_cta_primary_pl || 'Zadzwoń Teraz'}
+                              </span>
+                              <span className="cr-preview-btn cr-preview-btn--secondary">
+                                {editingRule.hero_cta_secondary_pl || 'Szybka Wycena'}
+                              </span>
+                            </div>
+                            {(editingRule.hero_badge_1_pl || editingRule.hero_badge_2_pl || editingRule.hero_badge_3_pl) && (
+                              <div className="cr-preview-badges">
+                                {editingRule.hero_badge_1_pl && <span>{editingRule.hero_badge_1_pl}</span>}
+                                {editingRule.hero_badge_2_pl && <span>{editingRule.hero_badge_2_pl}</span>}
+                                {editingRule.hero_badge_3_pl && <span>{editingRule.hero_badge_3_pl}</span>}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="cr-editor-footer">
                         <label className="cr-active-toggle">
                           <input type="checkbox" checked={editingRule.is_active ?? true} onChange={e => setEditingRule(r => ({ ...r!, is_active: e.target.checked }))} />
                           Aktywna
                         </label>
-                        <button className="cr-btn-cancel" onClick={() => setEditingRule(null)}>Anuluj</button>
+                        <button className="cr-btn-preview" onClick={() => setShowPreview(p => !p)}>
+                          <Eye size={15} /> {showPreview ? 'Ukryj podgląd' : 'Podgląd'}
+                        </button>
+                        <button className="cr-btn-cancel" onClick={() => { setEditingRule(null); setShowPreview(false); }}>Anuluj</button>
                         <button className="cr-btn-save" onClick={saveRule}>Zapisz regułę</button>
                       </div>
                     </div>

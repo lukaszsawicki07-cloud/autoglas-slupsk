@@ -2,7 +2,11 @@ import { Phone, Mail, MapPin, Facebook, Instagram } from 'lucide-react';
 import './Footer.css';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const Footer = () => {
+interface FooterProps {
+  onAdminOpen?: () => void;
+}
+
+const Footer = ({ onAdminOpen }: FooterProps) => {
   const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
   const phoneNumber = "+48 502 557 767";
@@ -67,6 +71,11 @@ const Footer = () => {
           <div className="footer-links">
             <a href="#">{t('footer.privacy')}</a>
             <a href="#">{t('footer.terms')}</a>
+            {onAdminOpen && (
+              <button className="footer-admin-btn" onClick={onAdminOpen} aria-label="Admin">
+                &bull;&bull;&bull;
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -119,6 +119,21 @@
   color: var(--accent-orange);
 }
 
+.footer-admin-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.2em;
+  transition: color 0.3s ease;
+}
+
+.footer-admin-btn:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
 @media (max-width: 1024px) {
   .footer-content {
     grid-template-columns: repeat(2, 1fr);
