@@ -1,0 +1,182 @@
+/* Sticky banner */
+.bt-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1500;
+  background: var(--text-dark);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+  animation: btSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  flex-wrap: wrap;
+}
+
+@keyframes btSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.bt-banner-text {
+  flex: 1;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+  min-width: 200px;
+}
+
+.bt-banner-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Exit-intent popup overlay */
+.bt-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: btFadeIn 0.25s ease;
+}
+
+@keyframes btFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.bt-popup {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+  animation: btPopIn 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes btPopIn {
+  from { transform: scale(0.88) translateY(20px); opacity: 0; }
+  to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+
+.bt-popup-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.bt-popup-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.bt-popup-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Close buttons */
+.bt-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.bt-close:hover { color: var(--white); }
+
+.bt-popup .bt-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--text-gray);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-light);
+  transition: background 0.2s, color 0.2s;
+}
+
+.bt-popup .bt-close:hover { background: #e0e0e0; color: var(--text-dark); }
+
+/* CTA buttons */
+.bt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.bt-btn--sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  border-radius: 8px;
+}
+
+.bt-btn--primary {
+  background: var(--primary-yellow);
+  color: var(--primary-dark);
+}
+
+.bt-btn--primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.bt-btn--secondary {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: var(--white);
+}
+
+.bt-popup .bt-btn--secondary {
+  border-color: var(--bg-light);
+  color: var(--text-dark);
+  background: var(--bg-light);
+}
+
+.bt-btn--secondary:hover { opacity: 0.85; }
+
+@media (max-width: 600px) {
+  .bt-banner {
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .bt-banner-text {
+    font-size: 0.82rem;
+    min-width: 100%;
+  }
+
+  .bt-banner-actions {
+    width: 100%;
+  }
+}

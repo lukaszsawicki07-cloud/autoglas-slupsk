@@ -503,6 +503,14 @@
   color: #c8860a;
 }
 
+.cr-tag--geo {
+  background: #e8f4fd;
+  color: #0066cc;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .cr-preview {
   font-size: 0.8rem;
   color: var(--text-gray);

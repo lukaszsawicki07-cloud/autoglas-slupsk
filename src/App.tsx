@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import QuoteForm from './components/QuoteForm';
 import WhatsAppButton from './components/WhatsAppButton';
 import AdminPanel from './components/AdminPanel';
+import BehavioralTriggerEngine from './components/BehavioralTriggerEngine';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
 import ClickHeatmap from './components/ClickHeatmap';
 import SectionTracker from './components/SectionTracker';
@@ -25,6 +26,7 @@ interface AdminPanelWindow extends Window {
 function App() {
   const { language } = useLanguage();
   const [isQuoteFormOpen, setIsQuoteFormOpen] = useState(false);
+  const [quoteEverOpened, setQuoteEverOpened] = useState(false);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
   const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
   const [isHeatmapVisible, setIsHeatmapVisible] = useState(false);
@@ -95,6 +97,7 @@ function App() {
   const handleQuoteOpen = useCallback(() => {
     trackEvent('quote_open');
     setIsQuoteFormOpen(true);
+    setQuoteEverOpened(true);
   }, []);
 
   return (
@@ -110,6 +113,7 @@ function App() {
       </main>
       <Footer onAdminOpen={() => setIsAdminPanelOpen(true)} />
       <WhatsAppButton />
+      <BehavioralTriggerEngine quoteOpened={quoteEverOpened} onQuoteClick={handleQuoteOpen} />
       <QuoteForm
         isOpen={isQuoteFormOpen}
         onClose={() => setIsQuoteFormOpen(false)}

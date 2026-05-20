@@ -10,6 +10,7 @@ export interface ContentRule {
   match_utm_medium: string | null;
   match_utm_campaign: string | null;
   match_referrer_contains: string | null;
+  match_country: string | null;
   hero_title_pl: string | null;
   hero_title_en: string | null;
   hero_subtitle_pl: string | null;
@@ -45,6 +46,7 @@ interface DynamicContentContextType {
   hero: HeroContent;
   matchedRule: ContentRule | null;
   utmParams: Record<string, string>;
+  visitorCountry: string | null;
   reloadRules: () => void;
 }
 
@@ -52,6 +54,7 @@ const DynamicContentContext = createContext<DynamicContentContextType>({
   hero: { title: null, subtitle: null, description: null, ctaPrimary: null, ctaSecondary: null, badge1: null, badge2: null, badge3: null },
   matchedRule: null,
   utmParams: {},
+  visitorCountry: null,
   reloadRules: () => {},
 });
 
@@ -65,11 +68,12 @@ function getUtmParams(): Record<string, string> {
   };
 }
 
-function ruleMatches(rule: ContentRule, params: Record<string, string>): boolean {
+function ruleMatches(rule: ContentRule, params: Record<string, string>, country: string | null): boolean {
   if (rule.match_utm_source && rule.match_utm_source !== params.utm_source) return false;
   if (rule.match_utm_medium && rule.match_utm_medium !== params.utm_medium) return false;
   if (rule.match_utm_campaign && rule.match_utm_campaign !== params.utm_campaign) return false;
   if (rule.match_referrer_contains && !params.referrer.includes(rule.match_referrer_contains)) return false;
+  if (rule.match_country && rule.match_country.toUpperCase() !== (country || '').toUpperCase()) return false;
   return true;
 }
 
@@ -92,18 +96,32 @@ const EMPTY_HERO: HeroContent = {
   ctaPrimary: null, ctaSecondary: null, badge1: null, badge2: null, badge3: null,
 };
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://qmrrekpxduweomkgpnzo.supabase.co';
+
 export const DynamicContentProvider: React.FC<{ language: string; children: ReactNode }> = ({ language, children }) => {
   const [matchedRule, setMatchedRule] = useState<ContentRule | null>(null);
   const [hero, setHero] = useState<HeroContent>(EMPTY_HERO);
+  const [visitorCountry, setVisitorCountry] = useState<string | null>(null);
   const utmParams = React.useMemo(() => getUtmParams(), []);
+
+  // Fetch visitor country once from Edge Function
+  useEffect(() => {
+    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+    fetch(`${SUPABASE_URL}/functions/v1/get-visitor-country`, {
+      headers: { Authorization: `Bearer ${anonKey}`, Apikey: anonKey },
+    })
+      .then(r => r.json())
+      .then(d => setVisitorCountry(d.country || null))
+      .catch(() => {});
+  }, []);
 
   const loadRules = React.useCallback(() => {
     supabase.rpc('get_active_content_rules').then(({ data }) => {
-      const match = data ? (data as ContentRule[]).find(r => ruleMatches(r, utmParams)) ?? null : null;
+      const match = data ? (data as ContentRule[]).find(r => ruleMatches(r, utmParams, visitorCountry)) ?? null : null;
       setMatchedRule(match);
       setHero(match ? extractHero(match, language) : EMPTY_HERO);
     });
-  }, [language, utmParams]);
+  }, [language, utmParams, visitorCountry]);
 
   useEffect(() => { loadRules(); }, [loadRules]);
 
@@ -113,7 +131,7 @@ export const DynamicContentProvider: React.FC<{ language: string; children: Reac
   }, [language, matchedRule]);
 
   return (
-    <DynamicContentContext.Provider value={{ hero, matchedRule, utmParams, reloadRules: loadRules }}>
+    <DynamicContentContext.Provider value={{ hero, matchedRule, utmParams, visitorCountry, reloadRules: loadRules }}>
       {children}
     </DynamicContentContext.Provider>
   );
