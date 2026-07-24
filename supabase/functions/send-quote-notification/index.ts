@@ -14,6 +14,7 @@ interface QuoteNotification {
   vehicle: string;
   vin?: string;
   description: string;
+  photo_url?: string | null;
 }
 
 const RECIPIENT_EMAILS = [
@@ -64,6 +65,14 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    const photoHtml = data.photo_url
+      ? `
+        <p><strong>Zdjęcie uszkodzenia:</strong></p>
+        <p><a href="${data.photo_url}" target="_blank"><img src="${data.photo_url}" alt="Zdjęcie uszkodzenia" style="max-width: 400px; width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd;" /></a></p>
+        <p><a href="${data.photo_url}" target="_blank">Otwórz zdjęcie w nowej karcie</a></p>
+      `
+      : "<p><strong>Zdjęcie uszkodzenia:</strong> Nie załączono</p>";
+
     const emailHtml = `
       <h2>Nowe zapytanie o wycenę!</h2>
       <p><strong>Imię i nazwisko:</strong> ${data.name}</p>
@@ -73,6 +82,7 @@ Deno.serve(async (req: Request) => {
       <p><strong>VIN:</strong> ${data.vin || "Nie podano"}</p>
       <p><strong>Opis uszkodzenia:</strong></p>
       <p>${data.description}</p>
+      ${photoHtml}
       <hr>
       <p><em>Skontaktuj się z klientem jak najszybciej!</em></p>
     `;
@@ -86,6 +96,7 @@ Email: ${data.email || "Nie podano"}
 Pojazd: ${data.vehicle}
 VIN: ${data.vin || "Nie podano"}
 Opis uszkodzenia: ${data.description}
+Zdjęcie uszkodzenia: ${data.photo_url || "Nie załączono"}
 
 ---
 Skontaktuj się z klientem jak najszybciej!

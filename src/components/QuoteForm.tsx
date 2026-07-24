@@ -83,7 +83,8 @@ const QuoteForm = ({ isOpen, onClose }: QuoteFormProps) => {
             email: formData.email,
             vehicle: formData.vehicle,
             vin: formData.vin,
-            description: formData.description
+            description: formData.description,
+            photo_url: photoUrl
           })
         });
       } catch (emailError) {
