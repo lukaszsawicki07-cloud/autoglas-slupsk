@@ -23,7 +23,7 @@ export async function initSession(language: string): Promise<void> {
   // Plain INSERT — session id is generated client-side so duplicates are rare
   // (only on page reload within same tab). ignoreDuplicates avoids the SELECT
   // permission that upsert/ON CONFLICT requires.
-  await supabase.from('analytics_sessions').insert({
+  await supabase.from('analytics_sessions').upsert({
     id,
     referrer: document.referrer.slice(0, 512),
     utm_source: params.get('utm_source') || '',
@@ -31,7 +31,7 @@ export async function initSession(language: string): Promise<void> {
     utm_campaign: params.get('utm_campaign') || '',
     user_agent: navigator.userAgent.slice(0, 512),
     language,
-  });
+  }, { onConflict: 'id', ignoreDuplicates: true });
 }
 
 export async function trackEvent(
