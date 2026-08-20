@@ -1,1 +1,9 @@
+# Redirect www to non-www (HTTPS)
+https://www.autoglasslupsk.pl/* https://autoglasslupsk.pl/:splat 301!
+
+# Redirect http to https
+http://autoglasslupsk.pl/* https://autoglasslupsk.pl/:splat 301!
+http://www.autoglasslupsk.pl/* https://autoglasslupsk.pl/:splat 301!
+
+# SPA fallback
 /*    /index.html   200
