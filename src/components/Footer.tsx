@@ -78,6 +78,15 @@ const Footer = ({ onAdminOpen }: FooterProps) => {
             )}
           </div>
         </div>
+
+        <div className="footer-credit">
+          <p>Strona zbudowana przez{' '}
+            <a href="https://www.webprofit.ai" target="_blank" rel="noopener noreferrer">
+              IT services
+            </a>
+            {' '}&mdash; profesjonalne rozwiązania webowe i AI.
+          </p>
+        </div>
       </div>
     </footer>
   );
