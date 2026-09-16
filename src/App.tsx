@@ -5,6 +5,7 @@ import VehicleTypes from './components/VehicleTypes';
 import WhyUs from './components/WhyUs';
 import Gallery from './components/Gallery';
 import Reviews from './components/Reviews';
+import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import QuoteForm from './components/QuoteForm';
@@ -109,6 +110,7 @@ function App() {
         <SectionTracker sectionId="why-us"><div data-section="why-us"><WhyUs /></div></SectionTracker>
         <SectionTracker sectionId="gallery"><div data-section="gallery"><Gallery /></div></SectionTracker>
         <SectionTracker sectionId="reviews"><div data-section="reviews"><Reviews /></div></SectionTracker>
+        <SectionTracker sectionId="faq"><div data-section="faq"><FAQ /></div></SectionTracker>
         <SectionTracker sectionId="contact"><div data-section="contact"><Contact /></div></SectionTracker>
       </main>
       <Footer onAdminOpen={() => setIsAdminPanelOpen(true)} />
