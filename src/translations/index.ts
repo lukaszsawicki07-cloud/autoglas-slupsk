@@ -170,26 +170,6 @@ export const translations = {
     },
     whatsapp: {
       message: 'Napisz do nas'
-    },
-    faq: {
-      title: 'Często Zadawane Pytania',
-      subtitle: 'Odpowiadamy na najważniejsze pytania naszych klientów',
-      q1: 'Ile trwa wymiana szyby samochodowej?',
-      a1: 'Wymiana szyby przedniej w samochodzie osobowym trwa zazwyczaj 1–2 godziny. Sam montaż jest szybki, ale klej potrzebuje około 1 godziny do pełnego utwardzenia, zanim będzie można bezpiecznie prowadzić pojazd. W przypadku pojazdów ciężarowych i maszyn czas realizacji może się różnić w zależności od typu szyby.',
-      q2: 'Czy dojeżdżacie do klienta?',
-      a2: 'Tak! Oferujemy usługę mobilną na terenie Słupska i okolic. Przyjeżdżamy do domu, firmy lub na parking. W przypadku pojazdów ciężarowych i maszyn budowlanych dojazd jest często koniecznością i standardowo wliczony w usługę.',
-      q3: 'Czy współpracujecie z ubezpieczalniami?',
-      a3: 'Tak, współpracujemy ze wszystkimi głównymi ubezpieczycielami. Pomagamy w formalnościach i kontakcie z ubezpieczeniem, aby proces wymiany szyby był dla Ciebie bezproblemowy. W wielu przypadkach ubezpieczenie pokrywa pełny koszt wymiany.',
-      q4: 'Jakie szyby stosujecie?',
-      a4: 'Pracujemy wyłącznie z renomowanymi producentami: Pilkington, Saint Gobain Sekurit, Fuyao oraz Yes glas. Każdą szybę zamawiamy pod konkretny model pojazdu, gwarantując pełną zgodność z systemami ADAS i sensorami.',
-      q5: 'Czy po wymianie szyby potrzebna jest kalibracja ADAS?',
-      a5: 'Tak, w nowoczesnych pojazdach wyposażonych w systemy wspomagania kierowcy (kamera, czujniki) kalibracja ADAS po wymianie szyby przedniej jest niezbędna. Wykonujemy ją profesjonalnie na miejscu, zapewniając poprawne działanie wszystkich systemów bezpieczeństwa.',
-      q6: 'Ile kosztuje wymiana szyby?',
-      a6: 'Cena zależy od marki i modelu pojazdu oraz typu szyby. Wycenę przygotowujemy indywidualnie po kontakcie telefonicznym lub przez formularz na stronie. Gwarantujemy uczciwe, konkurencyjne ceny bez ukrytych kosztów.',
-      q7: 'Jak długo trzeba czekać na szybę?',
-      a7: 'Czas oczekiwania na szybę to zazwyczaj 2–4 dni robocze, ponieważ każdą szybę zamawiamy pod konkretny model pojazdu. Gdy szyba dotrze do nas, umawiamy termin montażu — często tego samego dnia.',
-      q8: 'Czy dajecie gwarancję na usługi?',
-      a8: 'Tak, udzielamy gwarancji na wykonane usługi wymiany i naprawy szyb. Stosujemy markowe produkty i sprawdzony klej, co zapewnia trwałość i szczelność montażu. W razie jakichkolwiek problemów po wymianie, kontaktujemy się i rozwiązujemy sprawę.'
     }
   },
   en: {
@@ -363,26 +343,6 @@ export const translations = {
     },
     whatsapp: {
       message: 'Message us'
-    },
-    faq: {
-      title: 'Frequently Asked Questions',
-      subtitle: 'We answer the most important questions from our customers',
-      q1: 'How long does a windshield replacement take?',
-      a1: 'Replacing a front windshield in a passenger car usually takes 1–2 hours. The installation itself is quick, but the adhesive needs about 1 hour to fully cure before the vehicle can be safely driven. For trucks and heavy machinery, the time may vary depending on the glass type.',
-      q2: 'Do you come to the customer?',
-      a2: 'Yes! We offer a mobile service in Słupsk and surrounding areas. We come to your home, business, or parking lot. For trucks and construction equipment, on-site service is often a necessity and is typically included in the service.',
-      q3: 'Do you work with insurance companies?',
-      a3: 'Yes, we work with all major insurance providers. We help with paperwork and insurance contact to make the windshield replacement process hassle-free. In many cases, insurance covers the full cost of replacement.',
-      q4: 'What glass do you use?',
-      a4: 'We work exclusively with renowned manufacturers: Pilkington, Saint Gobain Sekurit, Fuyao, and Yes glas. Each windshield is ordered for a specific vehicle model, ensuring full compatibility with ADAS systems and sensors.',
-      q5: 'Is ADAS calibration needed after windshield replacement?',
-      a5: 'Yes, in modern vehicles equipped with driver assistance systems (camera, sensors), ADAS calibration after front windshield replacement is essential. We perform it professionally on-site, ensuring all safety systems function correctly.',
-      q6: 'How much does a windshield replacement cost?',
-      a6: 'The price depends on the vehicle make and model, and the type of glass. We prepare an individual quote after a phone call or through the form on our website. We guarantee fair, competitive prices with no hidden costs.',
-      q7: 'How long do I have to wait for the glass?',
-      a7: 'The waiting time for glass is usually 2–4 business days, as we order each windshield for a specific vehicle model. Once the glass arrives, we schedule the installation — often the same day.',
-      q8: 'Do you provide a warranty on services?',
-      a8: 'Yes, we provide a warranty on all windshield replacement and repair services. We use branded products and proven adhesive, ensuring durability and a leak-free installation. If any issues arise after replacement, we will contact you and resolve the matter.'
     }
   }
 };
